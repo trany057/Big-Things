@@ -54,6 +54,22 @@ struct APIService {
         task.resume()
     }
     
+    func fetchImage(urlString: String, completion: @escaping (Result<Data, Error>) -> Void) {
+        guard let url = URL(string: urlString) else {
+            completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
+            return
+        }
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            if let data = data {
+                completion(.success(data))
+            }
+        }.resume()
+    }
+    
     func postData<T: Decodable>(urlString: String, token: String? = nil, parameters: [String: Any], completion: @escaping (Result<T, Error>) -> Void) {
         guard let url = URL(string: urlString) else {
             completion(.failure(NetworkError.invalidURL))

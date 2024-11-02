@@ -13,13 +13,16 @@ class BigThingsListViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared)
     private var bigThings: [BigThing] = []
+    private var filteredBigThings: [BigThing] = []
     
     private let activityIndicator = UIActivityIndicatorView(style: .large)
+    private let searchController = UISearchController(searchResultsController: nil)
         
     override func viewDidLoad() {
         super.viewDidLoad()
         setupActivityIndicator()
         setupTableView()
+        setupSearchController()
         getBigThings()
     }
     
@@ -41,8 +44,30 @@ class BigThingsListViewController: UIViewController {
         tableView.refreshControl = refreshControl
     }
     
+    private func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Big Things"
+        searchController.searchBar.searchTextField.backgroundColor = .main
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+    }
+    
     @objc private func refreshData() {
         getBigThings()
+    }
+    
+    private func sortBigThings(_ bigThings: [BigThing]) -> [BigThing] {
+        return bigThings.sorted {
+            let rating1 = Double($0.rating) ?? 0
+            let rating2 = Double($1.rating) ?? 0
+            if rating1 != rating2 {
+                return rating1 > rating2
+            } else {
+                return $0.name.lowercased() < $1.name.lowercased()
+            }
+        }
     }
     
     private func getBigThings() {
@@ -54,7 +79,8 @@ class BigThingsListViewController: UIViewController {
             }
             switch result {
             case .success(let bigThings):
-                self.bigThings = bigThings
+                self.bigThings = self.sortBigThings(bigThings)
+                self.filteredBigThings = self.bigThings
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     self.refreshControl.endRefreshing()
@@ -69,17 +95,31 @@ class BigThingsListViewController: UIViewController {
     }
 }
 
+extension BigThingsListViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
+            filteredBigThings = bigThings
+            tableView.reloadData()
+            return
+        }
+        
+        filteredBigThings = bigThings.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        tableView.reloadData()
+    }
+}
+
 extension BigThingsListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return bigThings.count
+        return filteredBigThings.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "BigThingTableViewCell", for: indexPath) as? BigThingTableViewCell else {
             return UITableViewCell()
         }
-        let bigThing = bigThings[indexPath.row]
+        let bigThing = filteredBigThings[indexPath.row]
         cell.setContent(bigThing: bigThing)
         return cell
     }
@@ -88,8 +128,8 @@ extension BigThingsListViewController: UITableViewDataSource {
 extension BigThingsListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedBigThing = bigThings[indexPath.row]
-        performSegue(withIdentifier: "toDetailView", sender: bigThings[indexPath.row])
+        let selectedBigThing = filteredBigThings[indexPath.row]
+        performSegue(withIdentifier: "toDetailView", sender: selectedBigThing)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

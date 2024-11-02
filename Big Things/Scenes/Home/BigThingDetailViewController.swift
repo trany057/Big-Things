@@ -18,17 +18,25 @@ class BigThingDetailViewController: UIViewController {
     @IBOutlet weak var voteLabel: UILabel!
     @IBOutlet weak var updateLabel: UILabel!
     @IBOutlet weak var yearLabel: UILabel!
+    @IBOutlet weak var favoriteButton: UIButton!
+    @IBOutlet weak var seenButton: UIButton!
     
     private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared)
     var bigThing : BigThing?
     
+    private var blurEffectView: UIVisualEffectView?
     private let activityIndicator = UIActivityIndicatorView(style: .large)
+    private var isMarked = false
+    private var isFavorited = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupActivityIndicator()
         loadImage()
         setupContent()
+        
+        seenButton.setImage(UIImage(named: "unCheck")?.resized(to: CGSize(width: 32, height: 32)), for: .normal)
+        favoriteButton.setImage(UIImage(named: "star")?.resized(to: CGSize(width: 32, height: 32)), for: .normal)
     }
     
     private func setupActivityIndicator() {
@@ -73,6 +81,45 @@ class BigThingDetailViewController: UIViewController {
     }
     
     @IBAction func descriptionButtonTapped(_ sender: Any) {
+        guard let bigThing = bigThing else { return }
+
+        let blurEffect = UIBlurEffect(style: .systemChromeMaterialDark)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        
+        if let tabBarHeight = tabBarController?.tabBar.frame.height {
+            blurEffectView?.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height - tabBarHeight)
+        } else {
+            blurEffectView?.frame = view.bounds
+        }
+
+        blurEffectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        if let blurEffectView = blurEffectView {
+            view.addSubview(blurEffectView)
+        }
+
+        let dialog = CustomDialogView(frame: CGRect(x: 20, y: 100, width: view.frame.width - 40, height: 400))
+        dialog.configure(text: bigThing.description)
+        dialog.center = view.center
+
+        view.addSubview(dialog)
+        
+        dialog.onClose = { [weak self] in
+            self?.blurEffectView?.removeFromSuperview()
+            self?.blurEffectView = nil
+        }
     }
 
+    @IBAction func markButtonTapped(_ sender: Any) {
+        isMarked.toggle()
+        let buttonImage = isMarked ? UIImage(named: "check")?.resized(to: CGSize(width: 32, height: 32))
+                                   : UIImage(named: "unCheck")?.resized(to: CGSize(width: 32, height: 32))
+        seenButton.setImage(buttonImage, for: .normal)
+    }
+    
+    @IBAction func favoriteButtonTapped(_ sender: Any) {
+        isFavorited.toggle()
+        let buttonImage = isFavorited ? UIImage(named: "starFill")?.resized(to: CGSize(width: 32, height: 32))
+                                   : UIImage(named: "star")?.resized(to: CGSize(width: 32, height: 32))
+        favoriteButton.setImage(buttonImage, for: .normal)
+    }
 }

@@ -26,8 +26,8 @@ class BigThingTableViewCell: UITableViewCell {
     private func setupUI() {
         cellView.layer.cornerRadius = 15
         cellView.clipsToBounds = true
-        cellView.layer.borderWidth = 1
-        cellView.layer.borderColor = UIColor.gray.cgColor
+        cellView.layer.borderWidth = 2
+        cellView.layer.borderColor = UIColor.boder.cgColor
     }
     
     func setContent(bigThing: BigThing) {

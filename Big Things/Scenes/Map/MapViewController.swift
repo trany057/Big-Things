@@ -5,24 +5,35 @@
 //# This is my own work as defined by the University's Academic Misconduct policy.
 
 import UIKit
+import MapKit
 
 class MapViewController: UIViewController {
 
+    @IBOutlet weak var mapView: MKMapView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        setupMapView()
     }
-    
 
-    /*
-    // MARK: - Navigation
+    private func setupMapView() {
+        mapView.mapType = .standard
+        
+        let initialLocation = CLLocationCoordinate2D(latitude: -34.94376663282724, longitude: 138.59041355664925)
+        let region = MKCoordinateRegion(center: initialLocation, latitudinalMeters: 10000, longitudinalMeters: 10000)
+        mapView.setRegion(region, animated: true)
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        // Add a marker at the initial location
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = initialLocation
+        annotation.title = "Your location"
+        mapView.addAnnotation(annotation)
+        
+        mapView.showsUserLocation = true
     }
-    */
+}
 
+extension MapViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    }
 }

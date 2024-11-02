@@ -21,7 +21,7 @@ class BigThingDetailViewController: UIViewController {
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var seenButton: UIButton!
     
-    private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared)
+    private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared, coreDataService: .shared )
     var bigThing : BigThing?
     
     private var blurEffectView: UIVisualEffectView?

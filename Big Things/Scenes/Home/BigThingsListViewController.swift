@@ -11,7 +11,7 @@ class BigThingsListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     private let refreshControl = UIRefreshControl()
-    private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared)
+    private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared, coreDataService: .shared )
     private var bigThings: [BigThing] = []
     private var filteredBigThings: [BigThing] = []
     

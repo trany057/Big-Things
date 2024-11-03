@@ -11,7 +11,7 @@ class BigThingsListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     private let refreshControl = UIRefreshControl()
-    private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared, coreDataService: .shared )
+    private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared, coreDataService: .shared)
     private var bigThings: [BigThing] = []
     private var filteredBigThings: [BigThing] = []
     
@@ -111,17 +111,44 @@ extension BigThingsListViewController: UISearchResultsUpdating {
 
 extension BigThingsListViewController: UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredBigThings.count
+        if section == 0 {
+            return filteredBigThings.count
+        } else {
+            return filteredBigThings.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "BigThingTableViewCell", for: indexPath) as? BigThingTableViewCell else {
             return UITableViewCell()
         }
+        
+//        let filteredArray = filteredBigThings.filter { indexPath.section == 0 ? $0.name : $0.name}
+        if indexPath.section == 0 {
+            filteredBigThings = bigThings
+        } else {
+            filteredBigThings = bigThings
+        }
+        
         let bigThing = filteredBigThings[indexPath.row]
         cell.setContent(bigThing: bigThing)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = BigThingHeaderView()
+        let title = section == 0 ? "Known" : "Unknown"
+        headerView.configure(with: title)
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
     }
 }
 

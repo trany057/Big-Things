@@ -18,10 +18,9 @@ class BigThingDetailViewController: UIViewController {
     @IBOutlet weak var voteLabel: UILabel!
     @IBOutlet weak var updateLabel: UILabel!
     @IBOutlet weak var yearLabel: UILabel!
-    @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var seenButton: UIButton!
     
-    private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared, coreDataService: .shared )
+    private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared, coreDataService: .shared)
     var bigThing : BigThing?
     
     private var blurEffectView: UIVisualEffectView?
@@ -36,7 +35,6 @@ class BigThingDetailViewController: UIViewController {
         setupContent()
         
         seenButton.setImage(UIImage(named: "unCheck")?.resized(to: CGSize(width: 32, height: 32)), for: .normal)
-        favoriteButton.setImage(UIImage(named: "star")?.resized(to: CGSize(width: 32, height: 32)), for: .normal)
     }
     
     private func setupActivityIndicator() {
@@ -108,7 +106,9 @@ class BigThingDetailViewController: UIViewController {
             self?.blurEffectView = nil
         }
     }
+}
 
+extension BigThingDetailViewController {
     @IBAction func markButtonTapped(_ sender: Any) {
         isMarked.toggle()
         let buttonImage = isMarked ? UIImage(named: "check")?.resized(to: CGSize(width: 32, height: 32))
@@ -116,10 +116,14 @@ class BigThingDetailViewController: UIViewController {
         seenButton.setImage(buttonImage, for: .normal)
     }
     
-    @IBAction func favoriteButtonTapped(_ sender: Any) {
-        isFavorited.toggle()
-        let buttonImage = isFavorited ? UIImage(named: "starFill")?.resized(to: CGSize(width: 32, height: 32))
-                                   : UIImage(named: "star")?.resized(to: CGSize(width: 32, height: 32))
-        favoriteButton.setImage(buttonImage, for: .normal)
+    @IBAction func mapButtonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "toMapView", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toMapView",
+           let locationViewController = segue.destination as? LocationViewController {
+            locationViewController.bigThing = bigThing
+        }
     }
 }

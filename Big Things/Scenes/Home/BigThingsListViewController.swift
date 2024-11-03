@@ -7,13 +7,17 @@
 import UIKit
 
 class BigThingsListViewController: UIViewController {
-
+    
     @IBOutlet weak var tableView: UITableView!
     
     private let refreshControl = UIRefreshControl()
     private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared, coreDataService: .shared)
+    
     private var bigThings: [BigThing] = []
-    private var filteredBigThings: [BigThing] = []
+    private var knownBigThings: [BigThing] = []
+    private var unknownBigThings: [BigThing] = []
+    private var filteredKnownBigThings: [BigThing] = []
+    private var filteredUnknownBigThings: [BigThing] = []
     
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     private let searchController = UISearchController(searchResultsController: nil)
@@ -23,6 +27,11 @@ class BigThingsListViewController: UIViewController {
         setupActivityIndicator()
         setupTableView()
         setupSearchController()
+        getBigThings()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         getBigThings()
     }
     
@@ -80,7 +89,7 @@ class BigThingsListViewController: UIViewController {
             switch result {
             case .success(let bigThings):
                 self.bigThings = self.sortBigThings(bigThings)
-                self.filteredBigThings = self.bigThings
+                self.filterBigThings()
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     self.refreshControl.endRefreshing()
@@ -93,18 +102,51 @@ class BigThingsListViewController: UIViewController {
             }
         }
     }
+    
+    private func filterBigThings() {
+        knownBigThings.removeAll()
+        unknownBigThings.removeAll()
+        
+        let dispatchGroup = DispatchGroup()
+        
+        for bigThing in bigThings {
+            dispatchGroup.enter()
+            bigThingsRepository.getSavedBigThing(byId: bigThing.id) { [weak self] result in
+                defer { dispatchGroup.leave() }
+                guard let self = self else { return }
+                switch result {
+                case .success(let isSaved):
+                    if isSaved {
+                        self.knownBigThings.append(bigThing)
+                    } else {
+                        self.unknownBigThings.append(bigThing)
+                    }
+                case .failure(_):
+                    break
+                }
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            self.filteredKnownBigThings = self.knownBigThings
+            self.filteredUnknownBigThings = self.unknownBigThings
+            self.tableView.reloadData()
+        }
+    }
 }
 
 extension BigThingsListViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
-            filteredBigThings = bigThings
+            filteredKnownBigThings = knownBigThings
+            filteredUnknownBigThings = unknownBigThings
             tableView.reloadData()
             return
         }
         
-        filteredBigThings = bigThings.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        filteredKnownBigThings = knownBigThings.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        filteredUnknownBigThings = unknownBigThings.filter { $0.name.lowercased().contains(searchText.lowercased()) }
         tableView.reloadData()
     }
 }
@@ -116,10 +158,10 @@ extension BigThingsListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return filteredBigThings.count
+        if searchController.isActive {
+            return section == 0 ? filteredKnownBigThings.count : filteredUnknownBigThings.count
         } else {
-            return filteredBigThings.count
+            return section == 0 ? knownBigThings.count : unknownBigThings.count
         }
     }
     
@@ -128,34 +170,40 @@ extension BigThingsListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-//        let filteredArray = filteredBigThings.filter { indexPath.section == 0 ? $0.name : $0.name}
-        if indexPath.section == 0 {
-            filteredBigThings = bigThings
+        let bigThing: BigThing
+        if searchController.isActive {
+            bigThing = indexPath.section == 0 ? filteredKnownBigThings[indexPath.row] : filteredUnknownBigThings[indexPath.row]
         } else {
-            filteredBigThings = bigThings
+            bigThing = indexPath.section == 0 ? knownBigThings[indexPath.row] : unknownBigThings[indexPath.row]
         }
         
-        let bigThing = filteredBigThings[indexPath.row]
         cell.setContent(bigThing: bigThing)
         return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let rowCount = self.tableView(tableView, numberOfRowsInSection: section)
+        if rowCount == 0 {
+            return nil
+        }
+        
         let headerView = BigThingHeaderView()
         let title = section == 0 ? "Known" : "Unknown"
         headerView.configure(with: title)
+        
         return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        let rowCount = self.tableView(tableView, numberOfRowsInSection: section)
+        return rowCount == 0 ? 0 : 40
     }
 }
 
 extension BigThingsListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedBigThing = filteredBigThings[indexPath.row]
+        let selectedBigThing = indexPath.section == 0 ? (searchController.isActive ? filteredKnownBigThings[indexPath.row] : knownBigThings[indexPath.row]) : (searchController.isActive ? filteredUnknownBigThings[indexPath.row] : unknownBigThings[indexPath.row])
         performSegue(withIdentifier: "toDetailView", sender: selectedBigThing)
         tableView.deselectRow(at: indexPath, animated: true)
     }

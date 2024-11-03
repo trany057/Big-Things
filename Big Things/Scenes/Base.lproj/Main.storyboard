@@ -118,7 +118,7 @@
             </objects>
             <point key="canvasLocation" x="2837.4045801526718" y="-828.16901408450713"/>
         </scene>
-        <!--Big Thing Detail View Controller-->
+        <!--Detail Information-->
         <scene sceneID="LIf-iC-WY4">
             <objects>
                 <viewController id="bcZ-Ff-zvE" customClass="BigThingDetailViewController" customModule="Big_Things" customModuleProvider="target" sceneMemberID="viewController">
@@ -419,7 +419,7 @@
                                         <rect key="frame" x="0.0" y="5" width="170.66666666666666" height="90"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ova-LB-weq">
-                                                <rect key="frame" x="0.0" y="0.0" width="170.66666666666666" height="40"/>
+                                                <rect key="frame" x="5" y="0.0" width="160.66666666666666" height="40"/>
                                                 <color key="backgroundColor" red="0.090196078430000007" green="0.63529411759999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <color key="tintColor" red="0.090196078430000007" green="0.63529411759999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Button"/>
@@ -432,7 +432,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Mi-9p-cgc">
-                                                <rect key="frame" x="0.0" y="50" width="170.66666666666666" height="40"/>
+                                                <rect key="frame" x="5" y="50" width="160.66666666666666" height="40"/>
                                                 <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                                 <color key="tintColor" systemColor="systemOrangeColor"/>
                                                 <state key="normal" title="Button"/>
@@ -446,10 +446,10 @@
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="5Mi-9p-cgc" secondAttribute="trailing" id="9gt-M4-8Ha"/>
-                                            <constraint firstItem="Ova-LB-weq" firstAttribute="leading" secondItem="MQH-mb-eiF" secondAttribute="leading" id="XWB-Fh-XZ0"/>
-                                            <constraint firstItem="5Mi-9p-cgc" firstAttribute="leading" secondItem="MQH-mb-eiF" secondAttribute="leading" id="ZjU-Wb-Hye"/>
-                                            <constraint firstAttribute="trailing" secondItem="Ova-LB-weq" secondAttribute="trailing" id="zwM-qN-ufg"/>
+                                            <constraint firstAttribute="trailing" secondItem="5Mi-9p-cgc" secondAttribute="trailing" constant="5" id="9gt-M4-8Ha"/>
+                                            <constraint firstItem="Ova-LB-weq" firstAttribute="leading" secondItem="MQH-mb-eiF" secondAttribute="leading" constant="5" id="XWB-Fh-XZ0"/>
+                                            <constraint firstItem="5Mi-9p-cgc" firstAttribute="leading" secondItem="MQH-mb-eiF" secondAttribute="leading" constant="5" id="ZjU-Wb-Hye"/>
+                                            <constraint firstAttribute="trailing" secondItem="Ova-LB-weq" secondAttribute="trailing" constant="5" id="zwM-qN-ufg"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
@@ -482,7 +482,9 @@
                             <constraint firstItem="YX1-v0-ykq" firstAttribute="trailing" secondItem="ese-Cv-P0W" secondAttribute="trailing" constant="16" id="xoE-dO-UUP"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="glJ-Wf-Pph"/>
+                    <navigationItem key="navigationItem" title="Detail Information" id="glJ-Wf-Pph">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="4w3-pN-UZS"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="imageView" destination="iew-Lp-y63" id="vsB-23-2sV"/>
                         <outlet property="locationLabel" destination="HID-8w-Chk" id="KeR-q4-r8W"/>
@@ -494,13 +496,119 @@
                         <outlet property="voteLabel" destination="OoB-wH-SWM" id="0Dr-tL-wKm"/>
                         <outlet property="yearLabel" destination="fzb-gV-hhW" id="BMz-e6-MsD"/>
                         <segue destination="wTp-6P-zfJ" kind="push" identifier="toMapView" id="ygH-6M-fP7"/>
+                        <segue destination="QOa-6V-OTV" kind="push" identifier="toRatingView" id="BPg-GY-9LY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sWU-97-Z3r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3748.8549618320608" y="-828.16901408450713"/>
         </scene>
-        <!--Location View Controller-->
+        <!--Rate and Track a Big Thing-->
+        <scene sceneID="iLT-nd-3JS">
+            <objects>
+                <viewController id="QOa-6V-OTV" customClass="RatingViewController" customModule="Big_Things" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Hbx-5M-QvV">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QFW-mT-uiH">
+                                <rect key="frame" x="30" y="753" width="333" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Cwi-oQ-2ce"/>
+                                </constraints>
+                                <color key="tintColor" red="0.090196078430000007" green="0.63529411759999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Submit rating">
+                                    <fontDescription key="titleFontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="17"/>
+                                    <color key="baseBackgroundColor" red="0.090196078430000007" green="0.63529411759999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="submitButtonTapped:" destination="QOa-6V-OTV" eventType="touchUpInside" id="y4h-bJ-68a"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bBf-BR-8qg">
+                                <rect key="frame" x="16" y="76" width="361" height="282"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
+                                <color key="textColor" red="0.090196078430000007" green="0.63529411759999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How many stars do you want to rate?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s5f-Of-0z3">
+                                <rect key="frame" x="16" y="538" width="361" height="21"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yvF-Qs-FKu" customClass="CosmosView" customModule="Cosmos">
+                                <rect key="frame" x="61.666666666666657" y="581" width="270" height="150"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="270" id="wu9-kx-XQl"/>
+                                    <constraint firstAttribute="height" constant="150" id="xQE-h8-BoE"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="filledColor">
+                                        <color key="value" systemColor="systemOrangeColor"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="emptyBorderColor">
+                                        <color key="value" systemColor="systemGrayColor"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="filledBorderWidth">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="filledBorderColor">
+                                        <color key="value" systemColor="systemOrangeColor"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fillMode">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="emptyBorderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="starSize">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="totalStars">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="emptyColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="rating">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="MVA-ZA-se5"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="MVA-ZA-se5" firstAttribute="trailing" secondItem="QFW-mT-uiH" secondAttribute="trailing" constant="30" id="6eI-s1-Pja"/>
+                            <constraint firstItem="QFW-mT-uiH" firstAttribute="leading" secondItem="MVA-ZA-se5" secondAttribute="leading" constant="30" id="DJD-tr-u3X"/>
+                            <constraint firstItem="bBf-BR-8qg" firstAttribute="leading" secondItem="MVA-ZA-se5" secondAttribute="leading" constant="16" id="Nva-Wi-Gfw"/>
+                            <constraint firstItem="yvF-Qs-FKu" firstAttribute="top" secondItem="s5f-Of-0z3" secondAttribute="bottom" constant="22" id="OJx-gV-hr7"/>
+                            <constraint firstItem="s5f-Of-0z3" firstAttribute="top" secondItem="bBf-BR-8qg" secondAttribute="bottom" constant="180" id="Pgg-4h-guF"/>
+                            <constraint firstItem="MVA-ZA-se5" firstAttribute="bottom" secondItem="QFW-mT-uiH" secondAttribute="bottom" constant="10" id="Y9V-gz-NOZ"/>
+                            <constraint firstItem="s5f-Of-0z3" firstAttribute="leading" secondItem="MVA-ZA-se5" secondAttribute="leading" constant="16" id="ZuH-L7-vpj"/>
+                            <constraint firstItem="MVA-ZA-se5" firstAttribute="trailing" secondItem="s5f-Of-0z3" secondAttribute="trailing" constant="16" id="abI-9i-kOQ"/>
+                            <constraint firstItem="yvF-Qs-FKu" firstAttribute="centerX" secondItem="Hbx-5M-QvV" secondAttribute="centerX" id="edf-YN-9VF"/>
+                            <constraint firstItem="QFW-mT-uiH" firstAttribute="top" secondItem="yvF-Qs-FKu" secondAttribute="bottom" constant="22" id="hw3-4i-GEZ"/>
+                            <constraint firstItem="bBf-BR-8qg" firstAttribute="top" secondItem="MVA-ZA-se5" secondAttribute="top" constant="20" id="mFP-5K-HZU"/>
+                            <constraint firstItem="MVA-ZA-se5" firstAttribute="trailing" secondItem="bBf-BR-8qg" secondAttribute="trailing" constant="16" id="s2Y-Fv-rCV"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Rate and Track a Big Thing" id="o2t-2e-m2R"/>
+                    <connections>
+                        <outlet property="nameLabel" destination="bBf-BR-8qg" id="Nr8-Z5-0Se"/>
+                        <outlet property="ratingView" destination="yvF-Qs-FKu" id="CAU-pd-wxk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oP4-yy-lBK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4672.5190839694651" y="-1508.4507042253522"/>
+        </scene>
+        <!--Map-->
         <scene sceneID="RME-5U-X9N">
             <objects>
                 <viewController id="wTp-6P-zfJ" customClass="LocationViewController" customModule="Big_Things" customModuleProvider="target" sceneMemberID="viewController">
@@ -522,7 +630,7 @@
                             <constraint firstItem="573-eZ-gcx" firstAttribute="trailing" secondItem="mhI-sa-Snv" secondAttribute="trailing" id="hmc-8A-HAg"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="roY-vJ-sjP"/>
+                    <navigationItem key="navigationItem" title="Map" id="roY-vJ-sjP"/>
                     <connections>
                         <outlet property="mapView" destination="mhI-sa-Snv" id="jTY-s6-7r2"/>
                     </connections>

@@ -9,8 +9,10 @@ import Foundation
 protocol BigThingsRepositoryType {
     func getListBigThing(completion: @escaping(Result<[BigThing], Error>) -> Void)
     func getImageBigThing(nameImage: String, completion: @escaping (Result<Data, Error>) -> Void)
+    func submitRatingBigThing(id: Int, rating: Int, completion: @escaping((Result<Submit, Error>) -> Void))
     
     // Core Data Operations
+    func getSavedBigThing(byId id: String, completion: @escaping (Result<Bool, Error>) -> Void)
     func getSavedBigThings(completion: @escaping (Result<[BigThing], Error>) -> Void)
     func saveBigThing(_ bigThing: BigThing, completion: @escaping (Result<Void, Error>) -> Void)
     func deleteBigThing(_ bigThing: BigThing, completion: @escaping (Result<Void, Error>) -> Void)
@@ -34,6 +36,29 @@ struct BigThingsRepository: BigThingsRepositoryType {
     func getImageBigThing(nameImage: String, completion: @escaping (Result<Data, Error>) -> Void) {
         let urlString = "https://www.partiklezoo.com/bigthings/images/\(nameImage)"
         apiService.fetchImage(urlString: urlString, completion: completion)
+    }
+    
+    func submitRatingBigThing(id: Int, rating: Int, completion: @escaping((Result<Submit, Error>) -> Void)) {
+        let urlString = "https://www.partiklezoo.com/bigthings/?action=rate&id=\(id)&rating=\(rating)"
+        apiService.fetchData(urlString: urlString, completion: completion)
+    }
+    
+
+    // Core Data Operations
+    func getSavedBigThing(byId id: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+        let predicate = NSPredicate(format: "id == %@", id)
+        coreDataService.fetch(entityName: "BigThingEntity", by: predicate) { (result: Result<[BigThingEntity], Error>) in
+            switch result {
+            case .success(let bigThingEntities):
+                if bigThingEntities.first != nil {
+                    completion(.success(true))
+                } else {
+                    completion(.success(false))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
     
     func getSavedBigThings(completion: @escaping (Result<[BigThing], Error>) -> Void) {

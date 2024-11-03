@@ -26,15 +26,14 @@ class BigThingDetailViewController: UIViewController {
     private var blurEffectView: UIVisualEffectView?
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     private var isMarked = false
-    private var isFavorited = false
+    private var isSaved = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupActivityIndicator()
         loadImage()
         setupContent()
-        
-        seenButton.setImage(UIImage(named: "unCheck")?.resized(to: CGSize(width: 32, height: 32)), for: .normal)
+        setStatusMarkButton()
     }
     
     private func setupActivityIndicator() {
@@ -78,6 +77,27 @@ class BigThingDetailViewController: UIViewController {
         yearLabel.text = bigThing.year
     }
     
+    private func setStatusMarkButton() {
+        guard let bigThing = bigThing else { return }
+        bigThingsRepository.getSavedBigThing(byId: bigThing.id) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let isSaved):
+                self.isMarked = isSaved
+                self.isSaved = isSaved
+                DispatchQueue.main.async {
+                    let buttonImage = self.isMarked ? UIImage(named: "check")?.resized(to: CGSize(width: 32, height: 32))
+                                                    : UIImage(named: "unCheck")?.resized(to: CGSize(width: 32, height: 32))
+                    self.seenButton.setImage(buttonImage, for: .normal)
+                }
+            case .failure(_):
+                return
+            }
+        }
+    }
+}
+
+extension BigThingDetailViewController {
     @IBAction func descriptionButtonTapped(_ sender: Any) {
         guard let bigThing = bigThing else { return }
 
@@ -106,14 +126,30 @@ class BigThingDetailViewController: UIViewController {
             self?.blurEffectView = nil
         }
     }
-}
-
-extension BigThingDetailViewController {
+    
     @IBAction func markButtonTapped(_ sender: Any) {
         isMarked.toggle()
         let buttonImage = isMarked ? UIImage(named: "check")?.resized(to: CGSize(width: 32, height: 32))
                                    : UIImage(named: "unCheck")?.resized(to: CGSize(width: 32, height: 32))
         seenButton.setImage(buttonImage, for: .normal)
+        
+        if isMarked == true {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.performSegue(withIdentifier: "toRatingView", sender: nil)
+            }
+            if isSaved == false {
+                guard let bigThing = bigThing else { return }
+                bigThingsRepository.saveBigThing(bigThing) { [weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(let imageData):
+                        print("Save success")
+                    case .failure(_):
+                        print("Save error")
+                    }
+                }
+            }
+        }
     }
     
     @IBAction func mapButtonTapped(_ sender: Any) {
@@ -124,6 +160,17 @@ extension BigThingDetailViewController {
         if segue.identifier == "toMapView",
            let locationViewController = segue.destination as? LocationViewController {
             locationViewController.bigThing = bigThing
+        } else if segue.identifier == "toRatingView",
+           let ratingViewController = segue.destination as? RatingViewController {
+            ratingViewController.bigThing = bigThing
+            ratingViewController.delegate = self
         }
+    }
+}
+
+extension BigThingDetailViewController: RatingViewControllerDelegate {
+    func didSubmitRating(_ data: Submit) {
+        voteLabel.text = "\(data.votes ?? "") votes"
+        ratingLabel.text = "\(data.rating ?? "") rating"
     }
 }

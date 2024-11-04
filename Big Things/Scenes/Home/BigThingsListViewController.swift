@@ -27,6 +27,7 @@ class BigThingsListViewController: UIViewController {
         setupActivityIndicator()
         setupTableView()
         setupSearchController()
+        setupAddButton()
         getBigThings()
     }
     
@@ -58,9 +59,25 @@ class BigThingsListViewController: UIViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Big Things"
         searchController.searchBar.searchTextField.backgroundColor = .main
+        searchController.searchBar.tintColor = .white
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
+    }
+    
+    private func setupAddButton() {
+        let addButton = UIButton(type: .system)
+        addButton.setTitle("+", for: .normal)
+        addButton.setTitleColor(.white, for: .normal)
+        addButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 32)
+        addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+        
+        let barButtonItem = UIBarButtonItem(customView: addButton)
+        navigationItem.rightBarButtonItem = barButtonItem
+    }
+
+    @objc private func addButtonTapped() {
+        performSegue(withIdentifier: "toSubmitNewView", sender: nil)
     }
     
     @objc private func refreshData() {

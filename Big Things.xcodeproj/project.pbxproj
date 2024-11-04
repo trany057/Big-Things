@@ -165,6 +165,7 @@
 				DEVELOPMENT_TEAM = 8UXUQJW6WB;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Big Things/Info.plist";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please provide access to the photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -194,6 +195,7 @@
 				DEVELOPMENT_TEAM = 8UXUQJW6WB;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Big Things/Info.plist";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please provide access to the photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

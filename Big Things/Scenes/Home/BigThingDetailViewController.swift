@@ -5,8 +5,7 @@
 //# This is my own work as defined by the University's Academic Misconduct policy.
 
 import UIKit
-
-import UIKit
+import Cosmos
 
 class BigThingDetailViewController: UIViewController {
 
@@ -19,6 +18,7 @@ class BigThingDetailViewController: UIViewController {
     @IBOutlet weak var updateLabel: UILabel!
     @IBOutlet weak var yearLabel: UILabel!
     @IBOutlet weak var seenButton: UIButton!
+    @IBOutlet weak var ratingView: CosmosView!
     
     private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared, coreDataService: .shared)
     var bigThing : BigThing?
@@ -34,6 +34,13 @@ class BigThingDetailViewController: UIViewController {
         loadImage()
         setupContent()
         setStatusMarkButton()
+        setupSavedRatingView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        seenButton.isEnabled = true
+        setupSavedRatingView()
     }
     
     private func setupActivityIndicator() {
@@ -95,6 +102,31 @@ class BigThingDetailViewController: UIViewController {
             }
         }
     }
+    
+    private func setupSavedRatingView() {
+        ratingView.settings.fillMode = .full
+        ratingView.isUserInteractionEnabled = false
+        ratingView.isHidden = true
+
+        guard let bigThing = bigThing else { return }
+
+        bigThingsRepository.getSavedRating(byId: bigThing.id) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let myRating):
+                DispatchQueue.main.async {
+                    if myRating != 0 {
+                        self.ratingView.isHidden = false
+                        self.ratingView.rating = Double(myRating)
+                    }
+                }
+            case .failure(_):
+                DispatchQueue.main.async {
+                    self.ratingView.isHidden = true
+                }
+            }
+        }
+    }
 }
 
 extension BigThingDetailViewController {
@@ -134,15 +166,15 @@ extension BigThingDetailViewController {
         seenButton.setImage(buttonImage, for: .normal)
         
         if isMarked == true {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            seenButton.isEnabled = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 ) {
                 self.performSegue(withIdentifier: "toRatingView", sender: nil)
             }
             if isSaved == false {
                 guard let bigThing = bigThing else { return }
-                bigThingsRepository.saveBigThing(bigThing) { [weak self] result in
-                    guard let self = self else { return }
+                bigThingsRepository.saveBigThing(bigThing) { result in
                     switch result {
-                    case .success(let imageData):
+                    case .success():
                         print("Save success")
                     case .failure(_):
                         print("Save error")

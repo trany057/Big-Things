@@ -16,6 +16,8 @@ protocol BigThingsRepositoryType {
     func getSavedBigThings(completion: @escaping (Result<[BigThing], Error>) -> Void)
     func saveBigThing(_ bigThing: BigThing, completion: @escaping (Result<Void, Error>) -> Void)
     func deleteBigThing(_ bigThing: BigThing, completion: @escaping (Result<Void, Error>) -> Void)
+    func saveRating(byId id: String, rating: Int, completion: @escaping (Result<Void, Error>) -> Void)
+    func getSavedRating(byId id: String, completion: @escaping (Result<Int16, Error>) -> Void)
 }
 
 struct BigThingsRepository: BigThingsRepositoryType {
@@ -103,6 +105,47 @@ struct BigThingsRepository: BigThingsRepositoryType {
                         completion(.failure(error))
                     }
                 }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+     func saveRating(byId id: String, rating: Int, completion: @escaping (Result<Void, Error>) -> Void) {
+        let predicate = NSPredicate(format: "id == %@", id)
+        coreDataService.fetch(entityName: "BigThingEntity", by: predicate) { (result: Result<[BigThingEntity], Error>) in
+            switch result {
+            case .success(let bigThingEntities):
+                if !bigThingEntities.isEmpty {
+                    for entity in bigThingEntities {
+                        entity.myRating = Int16(rating)
+                    }
+                    coreDataService.saveContext { saveResult in
+                        switch saveResult {
+                        case .success:
+                            completion(.success(()))
+                        case .failure(let error):
+                            completion(.failure(error))
+                        }
+                    }
+                } else {
+                    completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Entity not found."])))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func getSavedRating(byId id: String, completion: @escaping (Result<Int16, any Error>) -> Void) {
+        let predicate = NSPredicate(format: "id == %@", id)
+        coreDataService.fetch(entityName: "BigThingEntity", by: predicate) { (result: Result<[BigThingEntity], Error>) in
+            switch result {
+            case .success(let bigThingEntities):
+                guard let bigThingEnity = bigThingEntities.first else {
+                    return
+                }
+                completion(.success(bigThingEnity.myRating))
             case .failure(let error):
                 completion(.failure(error))
             }

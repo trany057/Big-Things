@@ -17,6 +17,20 @@ class CoreDataService {
         return PersistenceController.shared.container.viewContext
     }
     
+    func saveContext(completion: @escaping (Result<Void, Error>) -> Void) {
+        let context = self.context()
+        if context.hasChanges {
+            do {
+                try context.save()
+                completion(.success(()))
+            } catch {
+                completion(.failure(error))
+            }
+        } else {
+            completion(.success(()))
+        }
+    }
+    
     func save(entity: NSManagedObject, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             try context().save()
@@ -28,7 +42,7 @@ class CoreDataService {
     
     func delete<T: NSManagedObject>(entity: T, completion: @escaping (Result<Void, Error>) -> Void) {
         context().delete(entity)
-        save(entity: entity, completion: completion)
+        saveContext(completion: completion)
     }
     
     func fetchAll<T: NSManagedObject>(entityName: String, completion: @escaping (Result<[T], Error>) -> Void) {

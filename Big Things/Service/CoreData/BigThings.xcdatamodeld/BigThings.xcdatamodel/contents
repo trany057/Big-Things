@@ -8,6 +8,7 @@
         <attribute name="location" optional="YES" attributeType="String"/>
         <attribute name="longitude" optional="YES" attributeType="String"/>
         <attribute name="marked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="myRating" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="rating" optional="YES" attributeType="String"/>
         <attribute name="status" optional="YES" attributeType="String"/>

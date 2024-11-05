@@ -107,8 +107,7 @@ extension MapViewController: MKMapViewDelegate {
             present(sideSheetViewController, animated: true, completion: nil)
         }
     }
-}
-
+} 
 class BigThingAnnotation: MKPointAnnotation {
     var bigThing: BigThing?
 }

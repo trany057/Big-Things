@@ -194,7 +194,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s3z-d5-u2S">
-                                        <rect key="frame" x="0.0" y="116.66666666666669" width="361" height="50.666666666666686"/>
+                                        <rect key="frame" x="0.0" y="116.6666666666667" width="361" height="50.666666666666671"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y20-2N-7c4">
                                                 <rect key="frame" x="10" y="0.0" width="117" height="50.666666666666664"/>
@@ -372,18 +372,51 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X4V-vQ-mCB">
                                         <rect key="frame" x="180.66666666666663" y="5" width="170.33333333333337" height="90"/>
                                         <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sph-hS-GGc" customClass="CosmosView" customModule="Cosmos">
+                                                <rect key="frame" x="0.0" y="0.0" width="170.33333333333334" height="45"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="filledColor">
+                                                        <color key="value" systemColor="systemOrangeColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="emptyBorderColor">
+                                                        <color key="value" systemColor="systemGrayColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="emptyBorderWidth">
+                                                        <real key="value" value="2"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="filledBorderColor">
+                                                        <color key="value" systemColor="systemOrangeColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="totalStars">
+                                                        <integer key="value" value="5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="filledBorderWidth">
+                                                        <real key="value" value="0.0"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="fillMode">
+                                                        <integer key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="emptyColor">
+                                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="starSize">
+                                                        <real key="value" value="30"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xHR-LL-FEg">
-                                                <rect key="frame" x="0.0" y="0.0" width="170.33333333333334" height="90"/>
+                                                <rect key="frame" x="0.0" y="45" width="170.33333333333334" height="45"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mark" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tZ3-mp-ZJI">
-                                                        <rect key="frame" x="0.0" y="0.0" width="110.33333333333333" height="90"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="110.33333333333333" height="45"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tv2-FI-gvw">
-                                                        <rect key="frame" x="130.33333333333334" y="25" width="40" height="40"/>
+                                                        <rect key="frame" x="130.33333333333334" y="2.6666666666666288" width="40" height="40"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="40" id="e1B-Ws-xrz"/>
@@ -410,10 +443,14 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="xHR-LL-FEg" firstAttribute="top" secondItem="X4V-vQ-mCB" secondAttribute="top" id="JzG-WV-EJr"/>
-                                            <constraint firstItem="xHR-LL-FEg" firstAttribute="leading" secondItem="X4V-vQ-mCB" secondAttribute="leading" id="eVz-oJ-EZn"/>
-                                            <constraint firstAttribute="bottom" secondItem="xHR-LL-FEg" secondAttribute="bottom" id="ig2-Hx-48G"/>
-                                            <constraint firstAttribute="trailing" secondItem="xHR-LL-FEg" secondAttribute="trailing" id="qnA-C3-EFd"/>
+                                            <constraint firstItem="xHR-LL-FEg" firstAttribute="height" secondItem="Sph-hS-GGc" secondAttribute="height" id="0Uf-Zz-FX9"/>
+                                            <constraint firstItem="xHR-LL-FEg" firstAttribute="top" secondItem="Sph-hS-GGc" secondAttribute="bottom" id="2oY-rZ-y7d"/>
+                                            <constraint firstAttribute="trailing" secondItem="Sph-hS-GGc" secondAttribute="trailing" id="Sdn-9m-1Ab"/>
+                                            <constraint firstAttribute="bottom" secondItem="xHR-LL-FEg" secondAttribute="bottom" id="XVf-J4-pRU"/>
+                                            <constraint firstItem="Sph-hS-GGc" firstAttribute="leading" secondItem="X4V-vQ-mCB" secondAttribute="leading" id="bFg-V5-Hio"/>
+                                            <constraint firstItem="Sph-hS-GGc" firstAttribute="top" secondItem="X4V-vQ-mCB" secondAttribute="top" id="d7f-Hg-4Gu"/>
+                                            <constraint firstItem="xHR-LL-FEg" firstAttribute="leading" secondItem="X4V-vQ-mCB" secondAttribute="leading" id="iSr-ln-6Rk"/>
+                                            <constraint firstAttribute="trailing" secondItem="xHR-LL-FEg" secondAttribute="trailing" id="pxa-zs-YON"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="MQH-mb-eiF">
@@ -491,6 +528,7 @@
                         <outlet property="locationLabel" destination="HID-8w-Chk" id="KeR-q4-r8W"/>
                         <outlet property="nameLabel" destination="Um8-g4-2SW" id="LgZ-Tp-GVK"/>
                         <outlet property="ratingLabel" destination="4ob-pi-UvM" id="fmt-fJ-KtZ"/>
+                        <outlet property="ratingView" destination="Sph-hS-GGc" id="wBt-nD-bgr"/>
                         <outlet property="seenButton" destination="Tv2-FI-gvw" id="yI6-TE-zYQ"/>
                         <outlet property="statusLabel" destination="82u-Wa-bPw" id="8Mf-al-EhG"/>
                         <outlet property="updateLabel" destination="x4A-dA-Ifw" id="2SV-mc-vpn"/>

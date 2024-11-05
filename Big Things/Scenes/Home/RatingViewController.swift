@@ -86,6 +86,17 @@ class RatingViewController: UIViewController {
                 }
             }
         }
+        
+        bigThingsRepository.saveRating(byId: bigThing.id, rating: Int(ratingValue)) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success():
+                print("save rating success")
+            case .failure(_):
+                print("save rating error")
+            }
+        }
     }
     
     @IBAction func submitButtonTapped(_ sender: Any) {

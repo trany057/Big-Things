@@ -29,6 +29,7 @@ class BigThingsListViewController: UIViewController {
         setupSearchController()
         setupAddButton()
         getBigThings()
+        self.tabBarController?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -230,6 +231,20 @@ extension BigThingsListViewController: UITableViewDelegate {
            let bigThingDetailViewController = segue.destination as? BigThingDetailViewController,
            let selectedBigThing = sender as? BigThing {
             bigThingDetailViewController.bigThing = selectedBigThing
+        }
+    }
+}
+
+extension BigThingsListViewController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if let index = tabBarController.viewControllers?.firstIndex(of: viewController) {
+            if index == 1 {
+                if let navigationController = tabBarController.viewControllers?[index] as? UINavigationController {
+                    if let mapViewController = navigationController.viewControllers.first as? MapViewController {
+                        mapViewController.bigthings = bigThings
+                    }
+                }
+            }
         }
     }
 }

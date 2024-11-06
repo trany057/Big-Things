@@ -18,6 +18,7 @@ class BigThingDetailViewController: UIViewController {
     @IBOutlet weak var updateLabel: UILabel!
     @IBOutlet weak var yearLabel: UILabel!
     @IBOutlet weak var seenButton: UIButton!
+    @IBOutlet weak var yourRatingLabel: UILabel!
     @IBOutlet weak var ratingView: CosmosView!
     
     private let bigThingsRepository: BigThingsRepositoryType = BigThingsRepository(apiService: .shared, coreDataService: .shared)
@@ -107,6 +108,7 @@ class BigThingDetailViewController: UIViewController {
         ratingView.settings.fillMode = .full
         ratingView.isUserInteractionEnabled = false
         ratingView.isHidden = true
+        yourRatingLabel.isHidden = true
 
         guard let bigThing = bigThing else { return }
 
@@ -117,12 +119,14 @@ class BigThingDetailViewController: UIViewController {
                 DispatchQueue.main.async {
                     if myRating != 0 {
                         self.ratingView.isHidden = false
+                        self.yourRatingLabel.isHidden = false
                         self.ratingView.rating = Double(myRating)
                     }
                 }
             case .failure(_):
                 DispatchQueue.main.async {
                     self.ratingView.isHidden = true
+                    self.yourRatingLabel.isHidden = true
                 }
             }
         }

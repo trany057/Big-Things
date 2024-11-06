@@ -64,10 +64,12 @@ extension SubmitNewViewController: UIImagePickerControllerDelegate, UINavigation
     }
     
     private func openPhotoLibrary() {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.sourceType = .photoLibrary
-        imagePickerController.delegate = self
-        present(imagePickerController, animated: true)
+        DispatchQueue.main.async {
+            let imagePickerController = UIImagePickerController()
+            imagePickerController.sourceType = .photoLibrary
+            imagePickerController.delegate = self
+            self.present(imagePickerController, animated: true)
+        }
     }
     
     // MARK: - UIImagePickerControllerDelegate

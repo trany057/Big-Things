@@ -6,6 +6,7 @@
 
 import Foundation
 
+// get all data bussiness of app
 protocol BigThingsRepositoryType {
     func getListBigThing(completion: @escaping(Result<[BigThing], Error>) -> Void)
     func getImageBigThing(nameImage: String, completion: @escaping (Result<Data, Error>) -> Void)

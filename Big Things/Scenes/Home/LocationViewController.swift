@@ -18,6 +18,7 @@ class LocationViewController: UIViewController {
         setupMapView()
     }
     
+    // get location of bigthing and show it on map
     private func setupMapView() {
         mapView.mapType = .standard
         

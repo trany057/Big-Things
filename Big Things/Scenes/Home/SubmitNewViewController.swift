@@ -8,7 +8,7 @@ import UIKit
 import Photos
 
 class SubmitNewViewController: UIViewController {
-
+  
     @IBOutlet weak var nameTF: UITextField!
     @IBOutlet weak var addressTF: UITextField!
     @IBOutlet weak var dateTF: UITextField!

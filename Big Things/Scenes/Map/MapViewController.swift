@@ -56,10 +56,12 @@ class MapViewController: UIViewController {
         }
     }
     
+    // get location and caculate distance of big thing near me
     private func getLocationOfBigthingNear() {
         guard let userLocation = locationManager.location else { return }
         let radius: Double = 500000
         
+        // get elements of bigthing near me
         bigthings?.forEach { bigThing in
             let bigThingLocation = CLLocation(latitude: Double(bigThing.latitude) ?? 0.0, longitude: Double(bigThing.longitude) ?? 0.0)
             let distance = bigThingLocation.distance(from: userLocation)
@@ -76,6 +78,8 @@ class MapViewController: UIViewController {
 
 // MARK: - CLLocationManagerDelegate
 extension MapViewController: CLLocationManagerDelegate {
+    
+    // update user location and load on map
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let userLocation = locations.last else { return }
         let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: 400000, longitudinalMeters: 400000)
@@ -95,6 +99,8 @@ extension MapViewController: CLLocationManagerDelegate {
 
 // MARK: - MKMapViewDelegate
 extension MapViewController: MKMapViewDelegate {
+    
+    // show information of bigthing near me when tap anotation
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         guard let annotation = view.annotation as? BigThingAnnotation, let selectedBigThing = annotation.bigThing else { return }
 

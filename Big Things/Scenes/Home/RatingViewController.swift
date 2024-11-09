@@ -59,6 +59,7 @@ class RatingViewController: UIViewController {
         }
     }
     
+    // submit rating to sever
     private func requestSubmit() {
         guard let bigThing = bigThing else { return }
         activityIndicator.startAnimating()
@@ -71,6 +72,7 @@ class RatingViewController: UIViewController {
             switch result {
             case .success(let data):
                 submitData = data
+                self.delegate?.didSubmitRating(data)
                 DispatchQueue.main.async {
                     self.showAlert(title: data.result.capitalizedFirstLetter(),
                                    message: (data.message ?? "Your rating is recorded").capitalizedFirstLetter()) { action in
@@ -87,20 +89,11 @@ class RatingViewController: UIViewController {
             }
         }
         
-        bigThingsRepository.saveRating(byId: bigThing.id, rating: Int(ratingValue)) { [weak self] result in
-            switch result {
-            case .success():
-                print("save rating success")
-            case .failure(_):
-                print("save rating error")
-            }
-        }
+        // save rating in coredata
+        bigThingsRepository.saveRating(byId: bigThing.id, rating: Int(ratingValue)) {_ in}
     }
     
     @IBAction func submitButtonTapped(_ sender: Any) {
         requestSubmit()
-        if let submitData = submitData {
-            self.delegate?.didSubmitRating(submitData)
-        }
     }
 }

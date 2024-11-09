@@ -54,6 +54,7 @@ class BigThingDetailViewController: UIViewController {
         activityIndicator.startAnimating()
     }
     
+    // load image from sever
     private func loadImage() {
         guard let bigThing = bigThing else { return }
         bigThingsRepository.getImageBigThing(nameImage: bigThing.image) { [weak self] result in
@@ -112,6 +113,7 @@ class BigThingDetailViewController: UIViewController {
 
         guard let bigThing = bigThing else { return }
 
+        // get state of rating from coredata
         bigThingsRepository.getSavedRating(byId: bigThing.id) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -134,6 +136,8 @@ class BigThingDetailViewController: UIViewController {
 }
 
 extension BigThingDetailViewController {
+    
+    // show decription of big thing
     @IBAction func descriptionButtonTapped(_ sender: Any) {
         guard let bigThing = bigThing else { return }
 
@@ -206,7 +210,9 @@ extension BigThingDetailViewController {
 
 extension BigThingDetailViewController: RatingViewControllerDelegate {
     func didSubmitRating(_ data: Submit) {
-        voteLabel.text = "\(data.votes ?? "") votes"
-        ratingLabel.text = "\(data.rating ?? "") rating"
+        DispatchQueue.main.async {
+            self.voteLabel.text = "\(data.votes ?? "") votes"
+            self.ratingLabel.text = "\(data.rating ?? "") rating"
+        }
     }
 }

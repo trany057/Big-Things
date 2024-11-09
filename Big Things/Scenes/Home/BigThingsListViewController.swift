@@ -97,6 +97,7 @@ class BigThingsListViewController: UIViewController {
         }
     }
     
+    // use repository to get data from sever
     private func getBigThings() {
         activityIndicator.startAnimating()
         bigThingsRepository.getListBigThing() { [weak self] result in
@@ -121,6 +122,7 @@ class BigThingsListViewController: UIViewController {
         }
     }
     
+    // filter data whn search
     private func filterBigThings() {
         knownBigThings.removeAll()
         unknownBigThings.removeAll()
@@ -175,6 +177,7 @@ extension BigThingsListViewController: UITableViewDataSource {
         return 2
     }
     
+    // filter list of big thing (known and unknown)
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.isActive {
             return section == 0 ? filteredKnownBigThings.count : filteredUnknownBigThings.count
@@ -220,6 +223,7 @@ extension BigThingsListViewController: UITableViewDataSource {
 
 extension BigThingsListViewController: UITableViewDelegate {
     
+    // click cell and move to view detail - pass data from cell
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedBigThing = indexPath.section == 0 ? (searchController.isActive ? filteredKnownBigThings[indexPath.row] : knownBigThings[indexPath.row]) : (searchController.isActive ? filteredUnknownBigThings[indexPath.row] : unknownBigThings[indexPath.row])
         performSegue(withIdentifier: "toDetailView", sender: selectedBigThing)
@@ -235,6 +239,7 @@ extension BigThingsListViewController: UITableViewDelegate {
     }
 }
 
+// pass data into MapViewController - use tabBarController
 extension BigThingsListViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if let index = tabBarController.viewControllers?.firstIndex(of: viewController) {

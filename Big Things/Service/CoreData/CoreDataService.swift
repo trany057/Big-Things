@@ -9,6 +9,7 @@ import CoreData
 
 class CoreDataService {
     
+    // singleton design pattern
     static let shared = CoreDataService()
     
     private init() {}
